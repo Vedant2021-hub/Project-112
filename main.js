@@ -1,3 +1,5 @@
+var synth = window.speechSynthesis;
+
 Webcam.set({
     width: 350,
     height: 300,
@@ -15,7 +17,7 @@ function take_snapshot() {
 }
 
 console.log('ml5 version: ', ml5.version);
-classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/5mxzZHkpx/model.json', modelLoaded);
+classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/IENOfbcVU/model.json', modelLoaded);
 
 function modelLoaded() {
     console.log('Model Loaded');
@@ -31,28 +33,28 @@ function gotResult(error, results) {
         console.error(error);
     } else {
         console.log(results);
-        document.getElementById("result_emotion_name").innerHTML = results[0].label;
+        document.getElementById("result_object_name").innerHTML = results[0].label;
         gesture = results[0].label;
-        toSpeak="";
-        if (gesture == "amazing") {
-            toSpeak="this is looking amazing";
-            document.getElementById("update_emoji").innerHTML = "&#128076;";
+        if (gesture == "Amazing") {
+            document.getElementById("update_gesture").innerHTML = "&#128076;";
+            speak_data = "This is looking amazing";
+            speak();
+        } else if (gesture == "All the best") {
+            document.getElementById("update_gesture").innerHTML = "&#128077;";
+            speak_data = "All the best";
+            speak();
+        } else if (gesture == "Victory") {
+            document.getElementById("update_gesture").innerHTML = "&#9996;";
+            speak_data = "That was the marvelous victory";
+            speak();
         }
-        else if (gesture == "best") {
-            toSpeak="All the best";
-            document.getElementById("update_emoji").innerHTML = "&#128077;";
-        }
-        else if (gesture == "victory") {
-            toSpeak="that was a marvelous victory ";
-            document.getElementById("update_emoji").innerHTML = "&#9996;";
-        }
-        speak();
+
     }
 }
 
 function speak() {
     var synth = window.speechSynthesis;
-    speak_data_1 = toSpeak;
-    var utterThis = new SpeechSynthesisUtterance(speak_data_1);
+    var utterThis = new SpeechSynthesisUtterance(speak_data);
     synth.speak(utterThis);
+    speak_data = "";
 }
